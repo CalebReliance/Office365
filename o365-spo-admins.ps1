@@ -1,9 +1,9 @@
 <# CIAOPS
 Script provided as is. Use at own risk. No guarantees or warranty provided.
 
-Source - https://github.com/directorcia/Office365/blob/master/o365-spo-extusr.ps1
+Source - https://github.com/directorcia/Office365/blob/master/o365-spo-admins.ps1
 
-Description - Log into the show the external SharePoint Online users across all site collections
+Description - Log into the show the all the SharePoint Online Site Collection Administrators across all site collections
 
 Prerequisites = 1
 1. Ensure SharePoint online PowerShell module installed or updated
@@ -15,7 +15,6 @@ More scripts available by joining http://www.ciaopspatron.com
 ## Variables
 $systemmessagecolor = "cyan"
 $processmessagecolor = "green"
-
 ## If you have running scripts that don't have a certificate, run this command once to disable that level of security
 ## set-executionpolicy -executionpolicy bypass -scope currentuser -force
 
@@ -32,13 +31,12 @@ foreach ($site in $SiteCollections) ## Loop through all Site Collections in tena
 {
     Write-host -ForegroundColor $processmessagecolor "Checking site:",$site.url
 
-try {
-    for ($i=0;;$i+=50) { ## There is a return limit of 50 users so need to capture data if more than 50 external users
-        Get-SPOExternalUser -SiteUrl $site.Url -PageSize 50 -Position $i -ea Stop | Select-object DisplayName,EMail,AcceptedAs,WhenCreated,InvitedBy,@{Name = "Url" ; Expression = { $site.url }}
-    }
+    $siteusers = get-spouser -site $site.Url    ## get all users for that SharePoint site
+    foreach ($siteuser in $siteusers){          ## loop through all the users in the site
+        If ($siteuser.issiteadmin -eq $true) {  ## if a users is a Site Collection administrator
+            Write-host "Site Admin =", $siteuser.displayname,"["$siteuser.loginname"]"
+        }
+     }
+     write-host
 }
-catch { ## this is where any error handling will appear if required
-}
-}
-
 write-host -foregroundcolor $systemmessagecolor "Script completed`n"
