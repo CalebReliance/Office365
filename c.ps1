@@ -53,7 +53,7 @@ $scripts += [PSCustomObject]@{
 }
 $scripts += [PSCustomObject]@{
     Name = "o365-connect-spo.ps1";
-    Service = "SharePoint"; 
+    Service = "SharePoint Online"; 
     Module = "Microsoft.Online.SharePoint.PowerShell"   
 }
 $scripts += [PSCustomObject]@{
@@ -110,6 +110,16 @@ $scripts += [PSCustomObject]@{
     Name = "o365-connect-mfa-ctldply.ps1";
     Service = "Add-ins";  
     Module = "O365CentralizedAddInDeployment"  
+}
+$scripts += [PSCustomObject]@{
+    Name = "az-connect-si.ps1";
+    Service = "Azure Security Insights";  
+    Module = "az.securityinsights"  
+}
+$scripts += [PSCustomObject]@{
+    Name = "o365-connect-pnp.ps1";
+    Service = "SharePoint Online PNP";  
+    Module = "pnp.powershell"  
 }
 if (-not $prompt) {
     try {
